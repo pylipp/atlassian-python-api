@@ -23,7 +23,7 @@ class AtlassianRestAPI(object):
 
     def __init__(self, url, username=None, password=None, timeout=60, api_root='rest/api', api_version='latest',
                  verify_ssl=True, session=None, oauth=None, cookies=None, advanced_mode=None, kerberos=None,
-                 cloud=False, proxies=None):
+                 cloud=False, proxies=None, token=None):
         if ('atlassian.net' in url or 'jira.com' in url) \
                 and '/wiki' not in url \
                 and self.__class__.__name__ in 'Confluence':
@@ -51,6 +51,8 @@ class AtlassianRestAPI(object):
             self._create_kerberos_session(kerberos)
         elif cookies is not None:
             self._session.cookies.update(cookies)
+        elif token is not None:
+            self.update_bearer_auth_header(token)
 
     def _create_basic_session(self, username, password):
         self._session.auth = (username, password)
@@ -86,6 +88,14 @@ class AtlassianRestAPI(object):
         :return:
         """
         self._session.headers.update({key: value})
+
+    def update_bearer_auth_header(self, token):
+        """
+        Update bearer token in header of existing session. Required after having
+        refreshed the access token when using token-based authentication. Details:
+        https://developer.atlassian.com/bitbucket/api/2/reference/meta/authentication#refresh-tokens
+        """
+        self._update_header("Authorization", "Bearer {}".format(token))
 
     def log_curl_debug(self, method, path, data=None, headers=None, trailing=None, level=logging.DEBUG):
         """

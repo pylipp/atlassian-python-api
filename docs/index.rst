@@ -147,6 +147,14 @@ Or reuse cookie file:
         url='http://localhost:8080',
         cookie=cookie_dict)
 
+Or `access token-based authentication`_
+
+.. code-block:: python
+
+    bitbucket = Bitbucket(
+        url='http://localhost:7990',
+        token="abcdef...7890")
+
 .. toctree::
    :maxdepth: 2
 
@@ -173,3 +181,4 @@ Or reuse cookie file:
 .. |Docs| image:: https://readthedocs.org/projects/atlassian-python-api/badge/?version=latest
    :target: https://atlassian-python-api.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
+.. _access token-based authentication: https://developer.atlassian.com/bitbucket/api/2/reference/meta/authentication#oauth-2
